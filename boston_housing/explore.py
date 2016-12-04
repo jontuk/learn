@@ -40,8 +40,15 @@ def performance_metric(y_true, y_predict):
     #return (score / len(y_true)) / (y_true.std() * y_predict.std())
     #return ((1/len(y_true)) * score / (y_true.std() * y_predict.std())) ** 2
 
-test(np.array([1, 2, 3]), np.array([1, 2, 3]))
-test(np.array([1, 2, 3]), np.array([1.1, 1.9, 2.1]))
-test(np.array([1, 2, 3]), np.array([2, 3, 4]))
-test(np.array([1, 2, 3]), np.array([3, 2, 1]))
+if 0:
+    test(np.array([1, 2, 3]), np.array([1, 2, 3]))
+    test(np.array([1, 2, 3]), np.array([1.1, 1.9, 2.1]))
+    test(np.array([1, 2, 3]), np.array([2, 3, 4]))
+    test(np.array([1, 2, 3]), np.array([3, 2, 1]))
 
+import sklearn.cross_validation
+
+train1, test1, train2, test2 = sklearn.cross_validation.train_test_split(list(range(100)), list(range(100)), test_size=0.2, train_size=0.8, random_state=1)
+print(len(train1), len(test1))
+print(len(train2), len(test2))
+print(train1[23], train2[23])
