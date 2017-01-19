@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from time import time
 from sklearn.metrics import f1_score
-
 student_data = pd.read_csv("student-data.csv")
 
 # Extract feature columns
@@ -73,7 +72,6 @@ print("Testing set has {} samples.".format(X_test.shape[0]))
 
 #----------------------------------------------------
 
-
 def train_classifier(clf, X_train, y_train):
     ''' Fits a classifier to the training data. '''
 
@@ -83,7 +81,7 @@ def train_classifier(clf, X_train, y_train):
     end = time()
 
     # Print the results
-    print("Trained model in {:.4f} seconds".format(end - start))
+    print "Trained model in {:.4f} seconds".format(end - start)
 
 
 def predict_labels(clf, features, target):
@@ -95,7 +93,7 @@ def predict_labels(clf, features, target):
     end = time()
 
     # Print and return results
-    print("Made predictions in {:.4f} seconds.".format(end - start))
+    print "Made predictions in {:.4f} seconds.".format(end - start)
     return f1_score(target.values, y_pred, pos_label='yes')
 
 
@@ -103,35 +101,14 @@ def train_predict(clf, X_train, y_train, X_test, y_test):
     ''' Train and predict using a classifer based on F1 score. '''
 
     # Indicate the classifier and the training set size
-    print("Training a {} using a training set size of {}. . .".format(clf.__class__.__name__, len(X_train)))
+    print "Training a {} using a training set size of {}. . .".format(clf.__class__.__name__, len(X_train))
 
     # Train the classifier
     train_classifier(clf, X_train, y_train)
 
     # Print the results of prediction for both training and testing
-    print("F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train)))
-    print("F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test)))
-
-
-def train_predict_md(n, i, clf, X_train, y_train, X_test, y_test):
-    ''' Train and predict using a classifer based on F1 score. '''
-
-    # Indicate the classifier and the training set size
-    if i == 0:
-        print("\n** Classifer {} - {}**  \n".format(n, clf.__class__.__name__,))
-        print('| Training Set Size | Training Time | Prediction Time (test) | F1 Score (train) | F1 Score (test) |')
-        print('| :---------------: | :---------------------: | :--------------------: | :--------------: | :-------------: |')
-
-    #print('| %s | %s | %s | %s | %s |', len(X_train), train_time)
-
-    len(X_train)
-    # Train the classifier
-    train_classifier(clf, X_train, y_train)
-
-    # Print the results of prediction for both training and testing
-    print("F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train)))
-    print("F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test)))
-
+    print "F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train))
+    print "F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test))
 
 
 # TODO: Import the three supervised learning models from sklearn
@@ -160,6 +137,10 @@ y_train_300 = y_train[:300]
 trainings += [(X_train_300, y_train_300)]
 
 # TODO: Execute the 'train_predict' function for each classifier and each training set size
-for n, clf in enumerate(clfs):
-    for i, (X_train, y_train) in enumerate(trainings):
-        train_predict_md(n, i, clf, X_train, y_train, X_test, y_test)
+if 0:
+    for n, clf in enumerate(clfs):
+        for i, (X_train, y_train) in enumerate(trainings):
+            train_predict(clf, X_train, y_train, X_test, y_test)
+
+print(X_train_100)
+print(y_train_100)
