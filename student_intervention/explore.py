@@ -96,8 +96,7 @@ def predict_labels(clf, features, target):
 
     # Print and return results
     print("Made predictions in {:.4f} seconds.".format(end - start))
-    y_pred = map(lambda y : 1 if y > 0.5 else 0, y_pred)
-    return f1_score(target.values, y_pred, pos_label=1)
+    return f1_score(target.values, y_pred, pos_label='yes')
 
 
 def train_predict(clf, X_train, y_train, X_test, y_test):
@@ -114,19 +113,53 @@ def train_predict(clf, X_train, y_train, X_test, y_test):
     print("F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test)))
 
 
+def train_predict_md(n, i, clf, X_train, y_train, X_test, y_test):
+    ''' Train and predict using a classifer based on F1 score. '''
 
-if 1:
-    def yes_no_series_to_num(s):
-        return pd.Series(index=s.keys(), data=[1 if i == 'yes' else 0 for i in s])
-    y_train = yes_no_series_to_num(y_train)
-    y_test = yes_no_series_to_num(y_test)
+    # Indicate the classifier and the training set size
+    if i == 0:
+        print("\n** Classifer {} - {}**  \n".format(n, clf.__class__.__name__,))
+        print('| Training Set Size | Training Time | Prediction Time (test) | F1 Score (train) | F1 Score (test) |')
+        print('| :---------------: | :---------------------: | :--------------------: | :--------------: | :-------------: |')
 
-if 0:
-    from sklearn.neighbors import KNeighborsClassifier
-    knn_clf = KNeighborsClassifier()
-    train_predict(knn_clf, X_train, y_train, X_test, y_test)
+    #print('| %s | %s | %s | %s | %s |', len(X_train), train_time)
 
-if 1:
-    from sklearn.linear_model import LinearRegression
-    lr_clf = LinearRegression()
-    train_predict(lr_clf, X_train, y_train, X_test, y_test)
+    len(X_train)
+    # Train the classifier
+    train_classifier(clf, X_train, y_train)
+
+    # Print the results of prediction for both training and testing
+    print("F1 score for training set: {:.4f}.".format(predict_labels(clf, X_train, y_train)))
+    print("F1 score for test set: {:.4f}.".format(predict_labels(clf, X_test, y_test)))
+
+
+
+# TODO: Import the three supervised learning models from sklearn
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import LogisticRegression
+
+# TODO: Initialize the three models
+clf_A = KNeighborsClassifier()
+clf_B = SGDClassifier()
+clf_C = LogisticRegression()
+clfs = (clf_A, clf_B, clf_C)
+
+trainings = list()
+# TODO: Set up the training set sizes
+X_train_100 = X_train[:100]
+y_train_100 = y_train[:100]
+trainings += [(X_train_100, y_train_100)]
+
+X_train_200 = X_train[:200]
+y_train_200 = y_train[:200]
+trainings += [(X_train_200, y_train_200)]
+
+X_train_300 = X_train[:300]
+y_train_300 = y_train[:300]
+trainings += [(X_train_300, y_train_300)]
+
+# TODO: Execute the 'train_predict' function for each classifier and each training set size
+for n, clf in enumerate(clfs):
+    for i, (X_train, y_train) in enumerate(trainings):
+        train_predict_md(n, i, clf, X_train, y_train, X_test, y_test)
