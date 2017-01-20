@@ -142,5 +142,47 @@ if 0:
         for i, (X_train, y_train) in enumerate(trainings):
             train_predict(clf, X_train, y_train, X_test, y_test)
 
-print(X_train_100)
-print(y_train_100)
+#--------------
+
+# TODO: Import 'GridSearchCV' and 'make_scorer'
+from sklearn.metrics import make_scorer
+from sklearn.grid_search import GridSearchCV
+
+# TODO: Create the parameters list you wish to tune
+parameters = dict(loss=('hinge',
+                        'log',
+                        'modified_huber',
+                        'squared_hinge',
+                        'perceptron',
+                        'squared_loss',
+                        'huber',
+                        'epsilon_insensitive',
+                        'squared_epsilon_insensitive'))
+
+
+# TODO: Initialize the classifier
+clf = SGDClassifier()
+
+# TODO: Make an f1 scoring function using 'make_scorer'
+def f1_score_with_label(_1, _2, *args, **kwargs):
+    #print(_1, _2)
+    kwargs['pos_label'] = 'yes'
+    return f1_score(_1, _2, *args, **kwargs)
+
+f1_scorer = make_scorer(lambda _1, _2 : f1_score(_1, _2, pos_label='yes'))
+f1_scorer = f1_score_with_label
+
+# TODO: Perform grid search on the classifier using the f1_scorer as the scoring method
+grid_obj = GridSearchCV(clf, parameters, scoring=f1_scorer, verbose=1)
+print(grid_obj)
+
+# TODO: Fit the grid search object to the training data and find the optimal parameters
+grid_obj = grid_obj.fit(X_train, y_train)
+print(grid_obj)
+
+# Get the estimator
+clf = grid_obj.best_estimator_
+
+# Report the final F1 score for training and testing after parameter tuning
+print "Tuned model has a training F1 score of {:.4f}.".format(predict_labels(clf, X_train, y_train))
+print "Tuned model has a testing F1 score of {:.4f}.".format(predict_labels(clf, X_test, y_test))
