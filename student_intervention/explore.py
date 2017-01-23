@@ -115,6 +115,7 @@ def train_predict(clf, X_train, y_train, X_test, y_test):
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import SGDClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 
 # TODO: Initialize the three models
 clf_A = KNeighborsClassifier()
@@ -157,23 +158,32 @@ parameters = dict(loss=('hinge',
                         'squared_loss',
                         'huber',
                         'epsilon_insensitive',
-                        'squared_epsilon_insensitive'))
+                        'squared_epsilon_insensitive'),
+                  penalty=('l2', 'l1', 'elasticnet'),
+                  fit_intercept=(True, False),
+                  n_iter=[10 * 2**i for i in range(3)],
+                  random_state=(1,),
+                  alpha=[0.00001 * 2**i for i in range(4)])
 
+# parameters = dict(kernel=('linear', 'poly', 'rbf', 'sigmoid'))
+# parameters = dict(n_neighbors=range(1, 50),
+#                   weights=('uniform', 'distance'),
+#                   n_jobs=(1,),
+#                   p=(1, 2, 3),
+#                   algorithm=('ball_tree', 'kd_tree', 'brute'))
 
 # TODO: Initialize the classifier
 clf = SGDClassifier()
 
 # TODO: Make an f1 scoring function using 'make_scorer'
-def f1_score_with_label(_1, _2, *args, **kwargs):
-    #print(_1, _2)
+def f1_score_with_label(*args, **kwargs):
     kwargs['pos_label'] = 'yes'
-    return f1_score(_1, _2, *args, **kwargs)
+    return f1_score(*args, **kwargs)
 
-f1_scorer = make_scorer(lambda _1, _2 : f1_score(_1, _2, pos_label='yes'))
-f1_scorer = f1_score_with_label
+f1_scorer = make_scorer(f1_score_with_label)
 
 # TODO: Perform grid search on the classifier using the f1_scorer as the scoring method
-grid_obj = GridSearchCV(clf, parameters, scoring=f1_scorer, verbose=1)
+grid_obj = GridSearchCV(clf, parameters, scoring=f1_scorer, verbose=1, n_jobs=4, )
 print(grid_obj)
 
 # TODO: Fit the grid search object to the training data and find the optimal parameters
