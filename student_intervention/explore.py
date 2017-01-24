@@ -150,22 +150,32 @@ from sklearn.metrics import make_scorer
 from sklearn.grid_search import GridSearchCV
 
 # TODO: Create the parameters list you wish to tune
-parameters = dict(loss=('hinge',
-                        'log',
-                        'modified_huber',
-                        'squared_hinge',
-                        'perceptron',
-                        'squared_loss',
-                        'huber',
-                        'epsilon_insensitive',
-                        'squared_epsilon_insensitive'),
-                  penalty=('l2', 'l1', 'elasticnet'),
-                  fit_intercept=(True, False),
-                  n_iter=[10 * 2**i for i in range(3)],
-                  random_state=(1,),
-                  alpha=[0.00001 * 2**i for i in range(4)])
+# parameters = dict(loss=('hinge',
+#                         'log',
+#                         'modified_huber',
+#                         'squared_hinge',
+#                         'perceptron',
+#                         'squared_loss',
+#                         'huber',
+#                         'epsilon_insensitive',
+#                         'squared_epsilon_insensitive'),
+#                   penalty=('l2', 'l1', 'elasticnet'),
+#                   fit_intercept=(True, False),
+#                   n_iter=[10**i for i in range(3)],
+#                   random_state=(1,),
+#                   alpha=[0.00005 * 2**i for i in range(5)])
 
-# parameters = dict(kernel=('linear', 'poly', 'rbf', 'sigmoid'))
+parameters = dict(#kernel=('linear', 'poly', 'rbf', 'sigmoid'),
+                  #decision_function_shape=('ovo', 'ovr'),
+                  #cache_size=(1, 10, 100),
+                  #shrinking=(True, False),
+                  #probability=(True, False),
+                  #degree=(2, 3, 4),
+                  C=[float(i)/100+0.01 for i in range(50, 200)],
+                  #gamma=(0, .0001, .001),
+                  #tol=(0.0005, 0.001, 0.002),
+                )
+
 # parameters = dict(n_neighbors=range(1, 50),
 #                   weights=('uniform', 'distance'),
 #                   n_jobs=(1,),
@@ -173,7 +183,7 @@ parameters = dict(loss=('hinge',
 #                   algorithm=('ball_tree', 'kd_tree', 'brute'))
 
 # TODO: Initialize the classifier
-clf = SGDClassifier()
+clf = SVC()
 
 # TODO: Make an f1 scoring function using 'make_scorer'
 def f1_score_with_label(*args, **kwargs):
@@ -184,7 +194,6 @@ f1_scorer = make_scorer(f1_score_with_label)
 
 # TODO: Perform grid search on the classifier using the f1_scorer as the scoring method
 grid_obj = GridSearchCV(clf, parameters, scoring=f1_scorer, verbose=1, n_jobs=4, )
-print(grid_obj)
 
 # TODO: Fit the grid search object to the training data and find the optimal parameters
 grid_obj = grid_obj.fit(X_train, y_train)
@@ -196,3 +205,24 @@ clf = grid_obj.best_estimator_
 # Report the final F1 score for training and testing after parameter tuning
 print "Tuned model has a training F1 score of {:.4f}.".format(predict_labels(clf, X_train, y_train))
 print "Tuned model has a testing F1 score of {:.4f}.".format(predict_labels(clf, X_test, y_test))
+
+print grid_obj.grid_scores_[0]
+print grid_obj.grid_scores_[0][1]
+
+for d in sorted(grid_obj.grid_scores_, lambda x1, x2: int(np.sign(x1[1] - x2[1]))):
+    print d
+
+#pd.DataFrame(grid_obj.cv_results_)
+#
+# The advantages of support vector machines are:
+#
+#         Effective in high dimensional spaces.
+#         Still effective in cases where number of dimensions is greater than the number of samples.
+#         Uses a subset of training points in the decision function (called support vectors), so it is also memory efficient.
+#         Versatile: different Kernel functions can be specified for the decision function. Common kernels are provided, but it is also possible to specify custom kernels.
+#
+# The disadvantages of support vector machines include:
+#
+#         If the number of features is much greater than the number of samples, the method is likely to give poor performances.
+#         SVMs do not directly provide probability estimates, these are calculated using an expensive five-fold cross-validation (see Scores and probabilities, below).
+#
