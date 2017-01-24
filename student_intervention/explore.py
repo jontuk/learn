@@ -165,15 +165,12 @@ from sklearn.grid_search import GridSearchCV
 #                   random_state=(1,),
 #                   alpha=[0.00005 * 2**i for i in range(5)])
 
-parameters = dict(#kernel=('linear', 'poly', 'rbf', 'sigmoid'),
-                  #decision_function_shape=('ovo', 'ovr'),
-                  #cache_size=(1, 10, 100),
-                  #shrinking=(True, False),
-                  #probability=(True, False),
-                  #degree=(2, 3, 4),
-                  C=[float(i)/100+0.01 for i in range(50, 200)],
-                  #gamma=(0, .0001, .001),
-                  #tol=(0.0005, 0.001, 0.002),
+# TODO: Create the parameters list you wish to tune
+parameters = dict(kernel=('linear', 'poly', 'rbf', 'sigmoid'),
+                  degree=(2, 3, 4),
+                  C=(.5, .8, .9, .99, 1, 1.01, 1.1, 1.2, 1.5),
+                  gamma=(.1, .3, .5, .7, .9, .11, .13, .15),
+                  tol=(0.0005, 0.001, 0.002),
                 )
 
 # parameters = dict(n_neighbors=range(1, 50),
@@ -211,6 +208,8 @@ print grid_obj.grid_scores_[0][1]
 
 for d in sorted(grid_obj.grid_scores_, lambda x1, x2: int(np.sign(x1[1] - x2[1]))):
     print d
+
+
 
 #pd.DataFrame(grid_obj.cv_results_)
 #
