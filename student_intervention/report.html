@@ -11853,14 +11853,15 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Calculate number of students</span>
 <span class="n">n_students</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="p">)</span>
 
 <span class="c1"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">feature_cols</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># remove passed, last column</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_cols</span><span class="p">)</span>
 
 <span class="n">pass_counts</span> <span class="o">=</span> <span class="n">student_data</span><span class="p">[</span><span class="s1">&#39;passed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 
@@ -11892,7 +11893,7 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -11918,7 +11919,7 @@ Graduation rate of the class: 67.09%
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Extract feature columns</span>
@@ -12000,7 +12001,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">preprocess_features</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -12071,7 +12072,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import any additional functionality you may need here</span>
@@ -12199,7 +12200,7 @@ This linear model is very fast to train and predict, which will also make tuning
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
@@ -12239,6 +12240,11 @@ This linear model is very fast to train and predict, which will also make tuning
     <span class="c1"># Print the results of prediction for both training and testing</span>
     <span class="k">print</span> <span class="s2">&quot;F1 score for training set: {:.4f}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">predict_labels</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">))</span>
     <span class="k">print</span> <span class="s2">&quot;F1 score for test set: {:.4f}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">predict_labels</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+    
+
+<span class="c1"># Set some random state to use throughout in order to generate reproducable results, and to provide a</span>
+<span class="c1"># good comparison when tuning.</span>
+<span class="n">random_state</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 
 </div>
@@ -12272,7 +12278,7 @@ This linear model is very fast to train and predict, which will also make tuning
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import the three supervised learning models from sklearn</span>
@@ -12281,9 +12287,9 @@ This linear model is very fast to train and predict, which will also make tuning
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
 
 <span class="c1"># TODO: Initialize the three models</span>
-<span class="n">clf_A</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span>
-<span class="n">clf_B</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">()</span>
-<span class="n">clf_C</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+<span class="n">clf_A</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span> <span class="c1"># random state not required</span>
+<span class="n">clf_B</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span> 
+<span class="n">clf_C</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">clfs</span> <span class="o">=</span> <span class="p">(</span><span class="n">clf_A</span><span class="p">,</span> <span class="n">clf_B</span><span class="p">,</span> <span class="n">clf_C</span><span class="p">)</span>
 
 <span class="n">trainings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -12302,9 +12308,10 @@ This linear model is very fast to train and predict, which will also make tuning
 
 <span class="c1"># TODO: Execute the &#39;train_predict&#39; function for each classifier and each training set size</span>
 <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">clfs</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="ow">in</span> <span class="n">trainings</span><span class="p">:</span>
-        <span class="n">train_predict</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
-        <span class="k">print</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">X_train_N</span><span class="p">,</span> <span class="n">y_train_N</span> <span class="ow">in</span> <span class="n">trainings</span><span class="p">:</span>
+            <span class="n">train_predict</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train_N</span><span class="p">,</span> <span class="n">y_train_N</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">print</span> <span class="s1">&#39;--&#39;</span>
 </pre></div>
 
 </div>
@@ -12318,68 +12325,71 @@ This linear model is very fast to train and predict, which will also make tuning
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Training a KNeighborsClassifier using a training set size of 100. . .
-Trained model in 0.0013 seconds
-Made predictions in 0.0020 seconds.
+Trained model in 0.0010 seconds
+Made predictions in 0.0018 seconds.
 F1 score for training set: 0.7883.
-Made predictions in 0.0019 seconds.
+Made predictions in 0.0018 seconds.
 F1 score for test set: 0.7727.
 
 Training a KNeighborsClassifier using a training set size of 200. . .
-Trained model in 0.0010 seconds
-Made predictions in 0.0040 seconds.
+Trained model in 0.0008 seconds
+Made predictions in 0.0041 seconds.
 F1 score for training set: 0.8345.
-Made predictions in 0.0024 seconds.
+Made predictions in 0.0023 seconds.
 F1 score for test set: 0.7971.
 
 Training a KNeighborsClassifier using a training set size of 300. . .
-Trained model in 0.0011 seconds
-Made predictions in 0.0092 seconds.
+Trained model in 0.0010 seconds
+Made predictions in 0.0083 seconds.
 F1 score for training set: 0.8558.
-Made predictions in 0.0020 seconds.
+Made predictions in 0.0030 seconds.
 F1 score for test set: 0.7681.
 
+--
 Training a SGDClassifier using a training set size of 100. . .
-Trained model in 0.0021 seconds
-Made predictions in 0.0013 seconds.
-F1 score for training set: 0.8075.
+Trained model in 0.0008 seconds
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.8354.
+F1 score for training set: 0.7879.
+Made predictions in 0.0002 seconds.
+F1 score for test set: 0.8272.
 
 Training a SGDClassifier using a training set size of 200. . .
-Trained model in 0.0006 seconds
-Made predictions in 0.0001 seconds.
-F1 score for training set: 0.1399.
+Trained model in 0.0009 seconds
+Made predictions in 0.0003 seconds.
+F1 score for training set: 0.8119.
 Made predictions in 0.0002 seconds.
-F1 score for test set: 0.0294.
+F1 score for test set: 0.8533.
 
 Training a SGDClassifier using a training set size of 300. . .
-Trained model in 0.0007 seconds
-Made predictions in 0.0001 seconds.
-F1 score for training set: 0.7976.
-Made predictions in 0.0004 seconds.
-F1 score for test set: 0.8375.
+Trained model in 0.0010 seconds
+Made predictions in 0.0002 seconds.
+F1 score for training set: 0.8245.
+Made predictions in 0.0002 seconds.
+F1 score for test set: 0.8387.
 
+--
 Training a SVC using a training set size of 100. . .
-Trained model in 0.0014 seconds
-Made predictions in 0.0008 seconds.
+Trained model in 0.0016 seconds
+Made predictions in 0.0010 seconds.
 F1 score for training set: 0.8591.
-Made predictions in 0.0007 seconds.
+Made predictions in 0.0009 seconds.
 F1 score for test set: 0.8333.
 
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0036 seconds
-Made predictions in 0.0027 seconds.
+Trained model in 0.0041 seconds
+Made predictions in 0.0028 seconds.
 F1 score for training set: 0.8581.
-Made predictions in 0.0013 seconds.
+Made predictions in 0.0014 seconds.
 F1 score for test set: 0.8408.
 
 Training a SVC using a training set size of 300. . .
-Trained model in 0.0070 seconds
-Made predictions in 0.0056 seconds.
+Trained model in 0.0080 seconds
+Made predictions in 0.0057 seconds.
 F1 score for training set: 0.8584.
-Made predictions in 0.0018 seconds.
+Made predictions in 0.0020 seconds.
 F1 score for test set: 0.8462.
 
+--
 </pre>
 </div>
 </div>
@@ -12416,22 +12426,22 @@ F1 score for test set: 0.8462.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0013</td>
-<td style="text-align:center">0.0019</td>
+<td style="text-align:center">0.0010</td>
+<td style="text-align:center">0.0018</td>
 <td style="text-align:center">0.7883</td>
 <td style="text-align:center">0.7727</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0010</td>
-<td style="text-align:center">0.0024</td>
+<td style="text-align:center">0.0008</td>
+<td style="text-align:center">0.0023</td>
 <td style="text-align:center">0.8345</td>
 <td style="text-align:center">0.7971</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0011</td>
-<td style="text-align:center">0.0020</td>
+<td style="text-align:center">0.0010</td>
+<td style="text-align:center">0.0030</td>
 <td style="text-align:center">0.8558</td>
 <td style="text-align:center">0.7681</td>
 </tr>
@@ -12450,24 +12460,24 @@ F1 score for test set: 0.8462.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0021</td>
+<td style="text-align:center">0.0008</td>
 <td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.8075</td>
-<td style="text-align:center">0.8354</td>
+<td style="text-align:center">0.7879</td>
+<td style="text-align:center">0.8272</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0006</td>
+<td style="text-align:center">0.0009</td>
 <td style="text-align:center">0.0002</td>
-<td style="text-align:center">0.1399</td>
-<td style="text-align:center">0.0294</td>
+<td style="text-align:center">0.8119</td>
+<td style="text-align:center">0.8533</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0007</td>
-<td style="text-align:center">0.0004</td>
-<td style="text-align:center">0.7976</td>
-<td style="text-align:center">0.8375</td>
+<td style="text-align:center">0.0010</td>
+<td style="text-align:center">0.0002</td>
+<td style="text-align:center">0.8245</td>
+<td style="text-align:center">0.8333</td>
 </tr>
 </tbody>
 </table>
@@ -12484,22 +12494,22 @@ F1 score for test set: 0.8462.
 <tbody>
 <tr>
 <td style="text-align:center">100</td>
-<td style="text-align:center">0.0014</td>
-<td style="text-align:center">0.0007</td>
+<td style="text-align:center">0.0016</td>
+<td style="text-align:center">0.0009</td>
 <td style="text-align:center">0.8591</td>
 <td style="text-align:center">0.8333</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0036</td>
-<td style="text-align:center">0.0013</td>
-<td style="text-align:center">0.8584</td>
+<td style="text-align:center">0.0041</td>
+<td style="text-align:center">0.0014</td>
+<td style="text-align:center">0.8581</td>
 <td style="text-align:center">0.8408</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.007</td>
-<td style="text-align:center">0.0018</td>
+<td style="text-align:center">0.0080</td>
+<td style="text-align:center">0.0020</td>
 <td style="text-align:center">0.8584</td>
 <td style="text-align:center">0.8462</td>
 </tr>
@@ -12536,7 +12546,6 @@ F1 score for test set: 0.8462.
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
 <p>I've chosen the SGDClassifier model. Given the results above, it shows the best combination of accuracy and computational efficiency. I hope with tuning it will give better generalised performance while still be much quicker to train and evaluate than the KNN and SVM model. For example it is an order of magnitude faster to train and several times faster to preduct than the SVM, with only slightly reduced accuracy.</p>
-<p>The 200 sample training run did achieve very poor performance - the parameter tuning will do several runs to find mean performance and therefore avoid a set of a parameters which leads these kind bad training runs.</p>
 <p>It has the advantage that it should scale well to much larger datasets as well.</p>
 
 </div>
@@ -12590,7 +12599,7 @@ F1 score for test set: 0.8462.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;GridSearchCV&#39; and &#39;make_scorer&#39;</span>
@@ -12610,12 +12619,11 @@ F1 score for test set: 0.8462.
                   <span class="n">fit_intercept</span><span class="o">=</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">),</span>
                   <span class="n">n_iter</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
                   <span class="n">l1_ratio</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">2</span><span class="p">,</span> <span class="o">.</span><span class="mi">4</span><span class="p">,</span> <span class="o">.</span><span class="mi">6</span><span class="p">,</span> <span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                  <span class="n">random_state</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,),</span>
                   <span class="n">epsilon</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mo">001</span><span class="p">,</span> <span class="o">.</span><span class="mo">01</span><span class="p">),</span>
                   <span class="n">alpha</span><span class="o">=</span><span class="p">[</span><span class="mf">0.00001</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="o">.</span><span class="mo">001</span><span class="p">,</span> <span class="o">.</span><span class="mo">01</span><span class="p">])</span>
 
 <span class="c1"># TODO: Initialize the classifier</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">()</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
 
 <span class="c1"># TODO: Make an f1 scoring function using &#39;make_scorer&#39; </span>
 <span class="k">def</span> <span class="nf">f1_score_with_label</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -12665,25 +12673,22 @@ F1 score for test set: 0.8462.
   &#39;precision&#39;, &#39;predicted&#39;, average, warn_for)
 /opt/anaconda27/lib/python2.7/site-packages/sklearn/metrics/classification.py:1074: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 due to no predicted samples.
   &#39;precision&#39;, &#39;predicted&#39;, average, warn_for)
-[Parallel(n_jobs=4)]: Done 416 tasks      | elapsed:    2.5s
-[Parallel(n_jobs=4)]: Done 2216 tasks      | elapsed:   11.9s
-[Parallel(n_jobs=4)]: Done 5216 tasks      | elapsed:   26.9s
-[Parallel(n_jobs=4)]: Done 9416 tasks      | elapsed:   48.1s
-[Parallel(n_jobs=4)]: Done 14816 tasks      | elapsed:  1.3min
-[Parallel(n_jobs=4)]: Done 21416 tasks      | elapsed:  1.9min
-[Parallel(n_jobs=4)]: Done 29216 tasks      | elapsed:  2.6min
-[Parallel(n_jobs=4)]: Done 34992 out of 34992 | elapsed:  3.2min finished
+[Parallel(n_jobs=4)]: Done 936 tasks      | elapsed:    1.9s
+[Parallel(n_jobs=4)]: Done 5736 tasks      | elapsed:    9.6s
+[Parallel(n_jobs=4)]: Done 13736 tasks      | elapsed:   22.2s
+[Parallel(n_jobs=4)]: Done 24936 tasks      | elapsed:   40.6s
+[Parallel(n_jobs=4)]: Done 34992 out of 34992 | elapsed:   56.8s finished
 </pre>
 </div>
 </div>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Made predictions in 0.0004 seconds.
+<pre>Made predictions in 0.0003 seconds.
 Tuned model has a training F1 score of 0.8279.
-Made predictions in 0.0003 seconds.
+Made predictions in 0.0002 seconds.
 Tuned model has a testing F1 score of 0.8112.
-mean: 0.81375, std: 0.01247, params: {&#39;n_iter&#39;: 25, &#39;loss&#39;: &#39;modified_huber&#39;, &#39;fit_intercept&#39;: True, &#39;l1_ratio&#39;: 0, &#39;penalty&#39;: &#39;l1&#39;, &#39;random_state&#39;: 1, &#39;epsilon&#39;: 0, &#39;alpha&#39;: 0.0001}
+mean: 0.81375, std: 0.01247, params: {&#39;n_iter&#39;: 25, &#39;loss&#39;: &#39;modified_huber&#39;, &#39;fit_intercept&#39;: True, &#39;l1_ratio&#39;: 0, &#39;penalty&#39;: &#39;l1&#39;, &#39;epsilon&#39;: 0, &#39;alpha&#39;: 0.0001}
 </pre>
 </div>
 </div>
