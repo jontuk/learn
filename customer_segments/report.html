@@ -12226,7 +12226,7 @@ dtype: float64
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>I chose to predict Detergents_Paper. The prediction r2_score of 0.7 on the test set indicates this feature is quite predictable from the remaining data and therefore an important feature for identifying customers' spending habits.</p>
+<p>I chose to predict Detergents_Paper. The prediction r2_score of 0.8 on the test set indicates this feature is quite predictable from the remaining data. Therefore the information this particular feature provides must already be embedded in the other features to a large degree. We should be able to drop the Detergents_Paper feature and simplify the problem by justing use the other features for identifying customers' spending habits, without losing much information.</p>
 
 </div>
 </div>
@@ -14897,7 +14897,8 @@ MzMzMzMzs7b8P6YbhZeIVDkmAAAAAElFTkSuQmCC
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>Yes, there are pairs of features which exhibit correlation. As suspected these involve Detergents_Paper. The correlated sets are Detergents_Paper, Grocery and Milk, Grocery and Milk, Detergents_Paper which confirm our result from question 2 where it was determined Detergents_Paper is a predictive feature of this dataset. The correlation appears to be a matched increase in spending with some linear, or close to linear coefficient.</p>
+<p>Yes, there are pairs of features which exhibit correlation. As suspected these involve Detergents_Paper. The correlated sets are Detergents_Paper, Grocery and Milk, Grocery and Milk, Detergents_Paper which confirm our result from question 2 where it was determined Detergents_Paper is highly correlated with the other features, and now we know which, since it can be predicted by them. The correlation appears to be a matched increase in spending with some linear, or close to linear coefficient.</p>
+<p>The distribution of the spend data on all features appears to follow a skewed right normal distribution which means the median is below the mean and most values fall below the mean, with few high outling values on the right (the long tail).</p>
 
 </div>
 </div>
@@ -28313,7 +28314,7 @@ rkJggg==
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc9e2a1e3d0&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f49fc993b10&gt;</pre>
 </div>
 
 </div>
@@ -30013,7 +30014,7 @@ AABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">sklearn.mixture</span>
@@ -30145,7 +30146,7 @@ mean silhouette coefficient 0.419 for 2 clusters
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the results of the clustering from implementation</span>
@@ -31248,7 +31249,7 @@ QmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Inverse transform the centers</span>
@@ -31329,16 +31330,51 @@ QmCC
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;Ratio of median of total spend:</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">true_centers</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;50%&#39;</span><span class="p">]))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Ratio of median of total spend:
+              Fresh      Milk   Grocery    Frozen  Detergents_Paper  \
+Segment 0  0.558443  1.828784  2.088529  0.686763          4.033068   
+Segment 1  1.046919  0.548387  0.542950  1.317169          0.406614   
+
+           Delicatessen  
+Segment 0      1.046090  
+Segment 1      0.747799  
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>The clusters are only really seperated by dimension 1 as the value for dimension 2 is close to zero for both clustes. The means the difference in model customer for cluser one and two is largely an increased spending on detergents and paper, milk and grocery from one to another.</p>
-<p>All three samples belong to the cluster where there is a higher spending on these items.</p>
-<p>I would say cluster 0 is likely to represent retail such as local shops, grocery stores and supermarkets.
-Cluster 1 is likely to be cafes, restaurant and fast food.</p>
+<p>I have compared the segment centers to the original data by calculating a ratio to the median spend. This gives a good idea on how the spending relates to the population of customers as isn't skewed by large outliers as the mean would be and allows the relative spend to be compared since it is a ratio and not absolute.</p>
+<p>We can see segment 0 has significantly more spent on Milk, Grocery and Detergents_Paper, which segment 1 has more spending on Fresh and Frozen. The spend on Delicatessen varies between the segments by less than the other categories.</p>
+<p>Segment 0 is likely to represent convenience stores, hotels and supermarkets due to the increased spend on Milk, Grocery and Detergents_Paper.</p>
+<p>While segment 1 is likely to represent a restuarant or fast food outlet due to the increased Fresh and Frozen spend.</p>
 
 </div>
 </div>
@@ -31356,7 +31392,7 @@ Cluster 1 is likely to be cafes, restaurant and fast food.</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the predictions</span>
@@ -31391,7 +31427,8 @@ Sample point 2 predicted to be in Cluster 0
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>After doing the PCA and clustering, I believe these samples are more similar than I originally thought. The cluster visualisation puts them very close together, so I believe it is likely they are all some type of local shop or supermarket.</p>
+<p>After doing the PCA and clustering, these samples are all predicted to be in cluster 0.</p>
+<p>For the second and third samples this is consistent with the earlier prediction of a convenience store and bakery respectively. The first prediction of a coffee shop looks less well suited to this cluster, so perhaps isn't a particularly good fit for either.</p>
 
 </div>
 </div>
@@ -31432,7 +31469,9 @@ Sample point 2 predicted to be in Cluster 0
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>It can be assumed that customers placed in the same clusters will have similar types of business and therefore similar behaviours. In that case, picking a typical customer in each clusters to tests a new scheme on should yield information about all customers while only affecting a few. The new sheme can then continue for all those in the clusters it is shown to benefit. The test candiate should be close to the centroid of the cluster.</p>
+<p>The customer segmentation process has grouped customers with similar spending habits, into the optimum grouping. We can hypothesize that customers within a segment will be similar types of business and demonstrate similar behaviors, including to the change in delivery schedule. We can then infer the change in behavior of customers in the same segment by observing the change of a subset of that group. We should assume customers in different groups will behave independently.</p>
+<p>We should choose a subset of each segment to change the delivery schedule so we effectively run an A/B test on each segment individually, making up the variation groups. The size of the variation group should should be large enough to give us statistically significant results, but not too large that too many customers would be adversely affected if the new delivery schedule was not to their liking. A selection of 10-20 customers evenly distributed around the centroid of each cluster in the 'Cluster Visualization' would be suitable. The remaining customers make up the control group, whose delivery schedule remains unchanged.</p>
+<p>The test should be run for a number of weeks, say 4, to gain confidence in results. We can measure success or failure by comparing the average percentage change in spend per customer over that period in the variation group with that of the control for that cluster. An increase in spending is seen as a success. Other factors we may want to take into consideration are numbers of letters of complaint, or change in overall profit taking into account cost of deliveries.</p>
 
 </div>
 </div>
@@ -31474,7 +31513,7 @@ Sample point 2 predicted to be in Cluster 0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the clustering results based on &#39;Channel&#39; data</span>
