@@ -97,6 +97,9 @@ class LearningAgent(Agent):
         self.next_waypoint = self.planner.next_waypoint()
         action = None
 
+        if not self.learning or random.random() < self.epsilon:
+            action = self.valid_actions[random.randrange(0, len(self.valid_actions))]
+
         ########### 
         ## TO DO ##
         ###########
