@@ -42,7 +42,7 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
-            self.epsilon -= 0.005
+            self.epsilon -= 0.05
         else:
             self.epsilon = 0
 
