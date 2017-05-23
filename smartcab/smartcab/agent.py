@@ -1,5 +1,6 @@
 import random
 import copy
+import math
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
@@ -26,6 +27,7 @@ class LearningAgent(Agent):
         # Set any additional class parameters as needed
         self.initial_action_rewards = dict(left=0.0, right=0.0, forward=0.0)
         self.initial_action_rewards[None] = 0.0
+        self.trial_num = 0
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -42,7 +44,8 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
-            self.epsilon -= 0.05
+            self.trial_num += 1
+            self.epsilon = math.pow(0.9, self.trial_num)
         else:
             self.epsilon = 0
 
@@ -147,7 +150,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True)
+    agent = env.create_agent(LearningAgent, learning=True, epsilon=1, alpha=0.75)
     
     ##############
     # Follow the driving agent
@@ -162,14 +165,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0, log_metrics=True)
+    sim = Simulator(env, update_delay=0, log_metrics=True, optimized=True)
     
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=10)
+    sim.run(n_test=5, tolerance=0.05)
 
 
 if __name__ == '__main__':
