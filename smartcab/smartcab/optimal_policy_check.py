@@ -39,7 +39,7 @@ def check_optimal_policy(state_actions):
 
     for policy_state, policy_action in optimal_policies:
         for state in state_actions:
-            if is_match(policy_state, state):
+            if is_match(policy_state, state): # and state_actions[state][policy_action] != 0:
                 best_action = sorted([(reward, action) for action, reward in state_actions[state].items()])[-1][1]
                 if best_action == policy_action:
                     correct_actions += 1

@@ -150,7 +150,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, epsilon=1, alpha=.33)
+    agent = env.create_agent(LearningAgent, learning=False, epsilon=1, alpha=.33)
     
     ##############
     # Follow the driving agent
