@@ -10,7 +10,7 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """ 
 
-    def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
+    def __init__(self, env, learning=False, epsilon=None, alpha=None):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
@@ -29,6 +29,7 @@ class LearningAgent(Agent):
         self.initial_action_rewards[None] = 0.0
         self.trial_num = 0
 
+
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
             'testing' is set to True if testing trials are being used
@@ -45,7 +46,8 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
             self.trial_num += 1
-            self.epsilon = math.pow(math.e, -0.05 * self.trial_num)
+            self.epsilon = math.pow(math.e, -0.03 * self.trial_num)
+            self.alpha = .25 + math.pow(math.e, -0.1 * self.trial_num) * .5
         else:
             self.epsilon = 0
 
@@ -87,6 +89,14 @@ class LearningAgent(Agent):
         if self.learning:
             self.Q.setdefault(state, copy.copy(self.initial_action_rewards))
 
+    def get_random_action(self, state):
+        """ Get a random action out of those that are valid, but additionally prefer those which
+            have a reward of zero, and hence probably haven't been taken before in training """
+        qs = self.Q.get(state)
+        valid_unseen_actions = [action for action in self.valid_actions if qs[action] == 0.0]
+        valid_actions = valid_unseen_actions if valid_unseen_actions else self.valid_actions
+        return valid_actions[random.randrange(0, len(valid_actions))]
+
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose
             which action to take, based on the 'state' the smartcab is in. """
@@ -103,7 +113,7 @@ class LearningAgent(Agent):
         #   Otherwise, choose an action with the highest Q-value for the current state
  
         if not self.learning or random.random() < self.epsilon:
-            return self.valid_actions[random.randrange(0, len(self.valid_actions))]
+            return self.get_random_action(state)
         return self.get_maxQ(state)
 
     def learn(self, state, action, reward):
@@ -150,7 +160,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=False, epsilon=1, alpha=.33)
+    agent = env.create_agent(LearningAgent, learning=True, epsilon=None, alpha=None)
     
     ##############
     # Follow the driving agent
@@ -172,7 +182,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=10, tolerance=0.01)
+    sim.run(n_test=20, tolerance=0.1)
 
 
 if __name__ == '__main__':
