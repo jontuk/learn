@@ -28,7 +28,7 @@ class LearningAgent(Agent):
         self.initial_action_rewards = dict(left=0.0, right=0.0, forward=0.0)
         self.initial_action_rewards[None] = 0.0
         self.trial_num = 0
-        self.target_num_trials = 100
+        self.target_num_trials = 2000
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -46,8 +46,8 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
             self.trial_num += 1
-            self.epsilon = 1 - float(self.trial_num) / self.target_num_trials
-            self.alpha = .1 + .4 * (1 - (float(self.trial_num) / self.target_num_trials) * (float(self.trial_num) / self.target_num_trials))
+            self.alpha = .1 + .9 * math.exp(-.002 * self.trial_num)
+            self.epsilon = (1 - math.pow(float(self.trial_num) / self.target_num_trials, 1.5))
         else:
             self.epsilon = 0
 
