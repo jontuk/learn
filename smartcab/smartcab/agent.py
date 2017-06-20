@@ -28,7 +28,7 @@ class LearningAgent(Agent):
         self.initial_action_rewards = dict(left=0.0, right=0.0, forward=0.0)
         self.initial_action_rewards[None] = 0.0
         self.trial_num = 0
-
+        self.target_num_trials = 100
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -46,8 +46,8 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
             self.trial_num += 1
-            self.epsilon = math.pow(math.e, -0.001 * self.trial_num)
-            self.alpha = .1 + math.pow(math.e, -0.001 * self.trial_num) * .5
+            self.epsilon = 1 - float(self.trial_num) / self.target_num_trials
+            self.alpha = .1 + .4 * (1 - (float(self.trial_num) / self.target_num_trials) * (float(self.trial_num) / self.target_num_trials))
         else:
             self.epsilon = 0
 
@@ -98,13 +98,7 @@ class LearningAgent(Agent):
     def get_random_action(self, state):
         """ Get a random action out of those that are valid, but additionally prefer those which
             have a reward of zero, and hence probably haven't been taken before in training """
-        qs = self.Q.get(state)
-        # If we have Q state, prefer an unseen action.
-        #  In mode cases 0.0 will be unseen, we accept this isn't always the case
-        #  and an improvement would be to refactor the code and avoid this case
-
-        valid_actions = [action for action in self.valid_actions if qs[action] == 0.0] if qs else None
-        return random.choice(valid_actions if valid_actions else self.valid_actions)
+        return random.choice(self.valid_actions)
 
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose
@@ -191,7 +185,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=10, tolerance=0.1)
+    sim.run(n_test=100, tolerance=0.1)
 
 
 if __name__ == '__main__':
