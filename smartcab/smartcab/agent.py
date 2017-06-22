@@ -28,7 +28,6 @@ class LearningAgent(Agent):
         self.initial_action_rewards = dict(left=0.0, right=0.0, forward=0.0)
         self.initial_action_rewards[None] = 0.0
         self.trial_num = 0
-        self.target_num_trials = 3000
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -46,9 +45,10 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
             self.trial_num += 1
-            self.alpha = .1 + .9 * math.exp(-.001 * self.trial_num)
-            self.epsilon = (1 - float(self.trial_num) / self.target_num_trials)
+            self.alpha = .9995 ** self.trial_num
+            self.epsilon = 1-math.exp(-4*math.exp(-self.trial_num/1000.0))
         else:
+            self.alpha = 0
             self.epsilon = 0
 
     def build_state(self):
@@ -163,7 +163,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True, epsilon=None, alpha=0.33)
+    agent = env.create_agent(LearningAgent, learning=True, epsilon=0, alpha=0.33)
     
     ##############
     # Follow the driving agent
