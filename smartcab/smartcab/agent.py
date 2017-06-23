@@ -45,6 +45,7 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         if self.learning:
             self.trial_num += 1
+            # reduce alpha.
             self.alpha = .9995 ** self.trial_num
             self.epsilon = 1-math.exp(-8*math.exp(-self.trial_num/300.0))
         else:
