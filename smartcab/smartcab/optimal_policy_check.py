@@ -33,20 +33,26 @@ def check_optimal_policy(state_actions):
     correct_actions = 0
 
     optimal_policies = list()
-    optimal_policies += [(('*', '*', '*', 'red', '*'), None)]  # Any red light
-    optimal_policies += [(('*', '*', 'left', 'green', 'right'), None)]  # We turn right, oncoming is turning right
-    optimal_policies += [(('*', 'forward', '*', 'green', 'right'), None)]  # We turn right, our left is going forward
 
-    for policy_state, policy_action in optimal_policies:
-        for state in state_actions:
+    # Right turn, left going forward, stay
+    optimal_policies += [(('forward', '*', '*', 'red', 'right'), None)]
+
+    # Right turn, other cases, go
+    optimal_policies += [(('*', '*', '*', 'red', 'right'), 'right')]
+
+    # Any other red light
+    optimal_policies += [(('*', '*', '*', 'red', '*'), None)]
+
+    for state in state_actions:
+        for policy_state, policy_action in optimal_policies:
             if is_match(policy_state, state): # and state_actions[state][policy_action] != 0:
                 best_action = sorted([(reward, action) for action, reward in state_actions[state].items()])[-1][1]
                 if best_action == policy_action:
                     correct_actions += 1
                 matched_states += 1
-
                 print('State: %s Optimal action: %s Q: %s Agent optimal? %s'
                       % (state, policy_action, state_actions[state], best_action == policy_action))
+                break
     print('Optimal policy followed in %s/%s matched states' % (correct_actions, matched_states))
 
 
